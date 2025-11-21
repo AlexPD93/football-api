@@ -1,7 +1,7 @@
 """
 Person router endpoints for FastAPI.
 
-Handles GET, POST, and DELETE operations for person resources.
+Handles GET, POST, PATCH and DELETE operations for person resources.
 """
 
 from fastapi import APIRouter, HTTPException
