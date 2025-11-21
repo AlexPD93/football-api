@@ -5,8 +5,8 @@ Provides functions to create, retrieve, and delete person records from DynamoDB.
 """
 import logging
 from pynamodb.exceptions import PutError, DeleteError, UpdateError, GetError
-from Routers.Person.models_db import PersonModel
-from Routers.Person.models import (Person, CreatePerson, PatchPerson)
+from routers.person.models_db import PersonModel
+from routers.person.models import (Person, CreatePerson, PatchPerson)
 from utils import deep_merge
 
 logger = logging.getLogger(__name__)

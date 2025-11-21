@@ -5,7 +5,7 @@ Handles GET, POST, PATCH and DELETE operations for person resources.
 """
 
 from fastapi import APIRouter, HTTPException
-from Actions.Person.actions import (
+from actions.person.actions import (
     get_person_by_id_action,
     create_person_action,
     delete_person_action,
