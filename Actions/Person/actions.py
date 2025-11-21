@@ -3,10 +3,13 @@ Person action handlers for business logic.
 
 Provides functions to create, retrieve, and delete person records from DynamoDB.
 """
-from pynamodb.exceptions import PutError, DeleteError, UpdateError
+import logging
+from pynamodb.exceptions import PutError, DeleteError, UpdateError, GetError
 from Routers.Person.models_db import PersonModel
 from Routers.Person.models import (Person, CreatePerson, PatchPerson)
 from utils import deep_merge
+
+logger = logging.getLogger(__name__)
 
 def get_person_by_id_action(person_id: str) -> Person:
     """Retrieve a person by ID from DynamoDB."""
@@ -14,6 +17,10 @@ def get_person_by_id_action(person_id: str) -> Person:
         db_person = PersonModel.get(person_id, "METADATA")
         return db_person.to_domain()
     except PersonModel.DoesNotExist:
+        logger.warning("Person not found: %s", person_id)
+        return None
+    except GetError:
+        logger.error("Error retrieving person %s", person_id, exc_info=True)
         return None
 
 def create_person_action(create_person: CreatePerson) -> CreatePerson:
@@ -21,9 +28,10 @@ def create_person_action(create_person: CreatePerson) -> CreatePerson:
     try:
         person_model = PersonModel.from_domain(create_person)
         person_model.save()
+        logger.info("Person created: %s", person_model.PK)
         return person_model
-    except (PutError, ValueError) as e:
-        print("Error creating person", e)
+    except (PutError, ValueError):
+        logger.error("Error creating person", exc_info=True)
         return None
 
 def delete_person_action(person_id: str) -> bool:
@@ -31,9 +39,13 @@ def delete_person_action(person_id: str) -> bool:
     try:
         db_person = PersonModel.get(person_id, "METADATA")
         db_person.delete()
+        logger.info("Person deleted: %s", person_id)
         return True
-    except (DeleteError, PersonModel.DoesNotExist) as e:
-        print("Error deleting person", e)
+    except PersonModel.DoesNotExist:
+        logger.warning("Delete failed – person not found: %s", person_id)
+        return False
+    except DeleteError:
+        logger.exception("Error deleting person: %s", person_id)
         return False
 
 def patch_person_action(person_id: str, request: PatchPerson) -> PatchPerson:
@@ -41,6 +53,7 @@ def patch_person_action(person_id: str, request: PatchPerson) -> PatchPerson:
     try:
         db_person = PersonModel.get(person_id, "METADATA")
     except PersonModel.DoesNotExist:
+        logger.warning("Patch failed – person not found: %s", person_id)
         return None
 
     # merge request updates into db_person
@@ -54,7 +67,8 @@ def patch_person_action(person_id: str, request: PatchPerson) -> PatchPerson:
     # save the updated model
     try:
         db_person.save()
+        logger.info("Person updated: %s", person_id)
         return db_person
-    except UpdateError as e:
-        print("Error updating person", e)
+    except UpdateError:
+        logger.exception("Error updating person: %s", person_id)
         return None

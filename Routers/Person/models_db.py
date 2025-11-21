@@ -35,7 +35,8 @@ class PersonModel(Model):
         data = self.to_simple_dict()
         data["person_id"] = data.pop("PK")
         data.pop("SK", "METADATA")
-        return Person.model_validate(data)   
+        return Person.model_validate(data)
+
     @classmethod
     def from_domain(cls, person_domain: Person | CreatePerson) -> "PersonModel":
         """Convert Person or CreatePerson (Pydantic) to PersonModel (DB)."""

@@ -15,36 +15,51 @@ from .models import Person, CreatePerson, PatchPerson
 
 router = APIRouter(prefix="/person", tags=["person"])
 
+class PersonNotFoundError(Exception):
+    """Person not found error"""
+
+class PersonCreationError(Exception):
+    """Person creation error"""
+
+class PersonUpdateError(Exception):
+    """Person update error"""
+
+class PersonDeleteError(Exception):
+    """Person delete error"""
+
 @router.get("/{personId}", response_model=Person)
 def get_person(person_id: str):
     """Retrieve a person by ID."""
-    person = get_person_by_id_action(person_id)
-    if not person:
-        raise HTTPException(status_code=404, detail="Person not found")
-    return person
+    try:
+        return get_person_by_id_action(person_id)
+    except PersonNotFoundError as exc:
+        raise HTTPException(status_code=404, detail="Person not found") from exc
 
 @router.post("/", response_model=CreatePerson)
 def create_person(person: CreatePerson):
     """Create a new person."""
-    person = create_person_action(person)
-
-    if not person:
-        raise HTTPException(status_code=500, detail="Error creating person")
-    return person.to_domain()
+    try:
+        return create_person_action(person).to_domain()
+    except PersonCreationError as exc:
+        raise HTTPException(status_code=500, detail="Failed to create person") from exc
 
 @router.delete("/{personId}", status_code=204)
 def delete_person(person_id: str):
     """Delete a person by ID."""
-    success = delete_person_action(person_id)
-    if not success:
-        raise HTTPException(status_code=404, detail="User not found")
+    try:
+        delete_person_action(person_id)
+    except PersonNotFoundError as exc:
+        raise HTTPException(status_code=404, detail="Person not found") from exc
+    except PersonDeleteError as exc:
+        raise HTTPException(status_code=500, detail="Failed to delete person") from exc
 
 @router.patch("/{person_id}", response_model=PatchPerson)
 def patch_person(person_id: str, person: PatchPerson):
     """Edit a person by ID."""
 
-    person = patch_person_action(person_id, person)
-
-    if not person:
-        raise HTTPException(status_code=500, detail="Error editing person")
-    return person
+    try:
+        return patch_person_action(person_id, person)
+    except PersonNotFoundError as exc:
+        raise HTTPException(status_code=404, detail="Person not found") from exc
+    except PersonUpdateError as exc:
+        raise HTTPException(status_code=500, detail="Failed to update person") from exc
