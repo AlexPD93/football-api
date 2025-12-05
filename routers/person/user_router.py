@@ -40,9 +40,17 @@ def get_all_persons():
 def get_person(person_id: str):
     """Retrieve a person by ID."""
     try:
-        return get_person_by_id_action(person_id)
-    except PersonNotFoundError as exc:
-        raise HTTPException(status_code=404, detail="Person not found") from exc
+        person = get_person_by_id_action(person_id)
+        if person is None:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Person with ID {person_id} not found."
+            )
+        return person
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
 
 @router.post("/", response_model=CreatePerson)
 def create_person(person: CreatePerson):
