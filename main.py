@@ -5,7 +5,7 @@ FastAPI application entry point that includes person resource routers.
 """
 
 from fastapi import FastAPI
-from Routers.Person import user_router
+from routers.person import user_router
 
 app = FastAPI()
 
