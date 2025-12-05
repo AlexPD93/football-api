@@ -11,6 +11,16 @@ from utils import deep_merge
 
 logger = logging.getLogger(__name__)
 
+def get_all_people_action():
+    """Scans the DynamoDb table to get all person records."""
+
+    try:
+        all_db_persons = PersonModel.scan()
+        return [person.to_domain() for person in all_db_persons]
+    except GetError:
+        logger.error("Error scanning table: {e}")
+        return []
+
 def get_person_by_id_action(person_id: str) -> Person:
     """Retrieve a person by ID from DynamoDB."""
     try:

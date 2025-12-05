@@ -6,6 +6,7 @@ Handles GET, POST, PATCH and DELETE operations for person resources.
 
 from fastapi import APIRouter, HTTPException
 from actions.person.actions import (
+    get_all_people_action,
     get_person_by_id_action,
     create_person_action,
     delete_person_action,
@@ -26,6 +27,14 @@ class PersonUpdateError(Exception):
 
 class PersonDeleteError(Exception):
     """Person delete error"""
+
+@router.get("/", response_model=list[Person])
+def get_all_persons():
+    """Retrieve a person by ID."""
+    try:
+        return get_all_people_action()
+    except PersonNotFoundError as exc:
+        raise HTTPException(status_code=500, detail="Internal server error.") from exc
 
 @router.get("/{personId}", response_model=Person)
 def get_person(person_id: str):
