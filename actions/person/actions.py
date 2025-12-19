@@ -18,6 +18,7 @@ def get_all_people_action():
 
     try:
         all_db_persons = PersonModel.scan()
+        print('hello')
         return [person.to_domain() for person in all_db_persons]
     except GetError:
         logger.error("Error scanning table: {e}")
