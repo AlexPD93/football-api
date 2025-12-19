@@ -14,10 +14,12 @@ app = FastAPI()
 # Setup static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
 @app.get("/")
 def read_root():
     """Health check endpoint."""
     return {"status": "ok"}
+
 
 # Include the API and dashboard routers
 app.include_router(person_router)
