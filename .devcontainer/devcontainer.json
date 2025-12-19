@@ -1,0 +1,8 @@
+{
+  "name": "football-api (personal GitHub only)",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${env:HOME}/.ssh/id_ed25519_personal,target=/home/vscode/.ssh/id_ed25519,type=bind,readonly"
+  ]
+}
