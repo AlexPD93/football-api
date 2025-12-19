@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tuesday Football</h1>
+
+    <div class="tabs">
+        <button class="tab-button active" hx-get="/goals" hx-target="#tab-content" hx-trigger="click">Goals Scored</button>
+        <button class="tab-button" hx-get="/wins" hx-target="#tab-content" hx-trigger="click">Games Won</button>
+    </div>
+
+    <div id="tab-content" hx-get="/goals" hx-trigger="load">
+        <p>Loading...</p>
+    </div>
+{% endblock %}

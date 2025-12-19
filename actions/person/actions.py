@@ -3,13 +3,15 @@ Person action handlers for business logic.
 
 Provides functions to create, retrieve, and delete person records from DynamoDB.
 """
+
 import logging
 from pynamodb.exceptions import PutError, DeleteError, UpdateError, GetError
 from routers.person.models_db import PersonModel
-from routers.person.models import (Person, CreatePerson, PatchPerson)
+from routers.person.models import Person, CreatePerson, PatchPerson
 from utils import deep_merge
 
 logger = logging.getLogger(__name__)
+
 
 def get_all_people_action():
     """Scans the DynamoDb table to get all person records."""
@@ -20,6 +22,7 @@ def get_all_people_action():
     except GetError:
         logger.error("Error scanning table: {e}")
         return []
+
 
 def get_person_by_id_action(person_id: str) -> Person:
     """Retrieve a person by ID from DynamoDB."""
@@ -33,6 +36,7 @@ def get_person_by_id_action(person_id: str) -> Person:
         logger.error("Error retrieving person %s", person_id, exc_info=True)
         return None
 
+
 def create_person_action(create_person: CreatePerson) -> CreatePerson:
     """Create a new person in DynamoDB."""
     try:
@@ -43,6 +47,7 @@ def create_person_action(create_person: CreatePerson) -> CreatePerson:
     except (PutError, ValueError):
         logger.error("Error creating person", exc_info=True)
         return None
+
 
 def delete_person_action(person_id: str) -> bool:
     """Delete a person from DynamoDB by ID."""
@@ -57,6 +62,7 @@ def delete_person_action(person_id: str) -> bool:
     except DeleteError:
         logger.exception("Error deleting person: %s", person_id)
         return False
+
 
 def patch_person_action(person_id: str, request: PatchPerson) -> PatchPerson:
     """Edit a person from DynamoDB by ID."""
@@ -82,3 +88,21 @@ def patch_person_action(person_id: str, request: PatchPerson) -> PatchPerson:
     except UpdateError:
         logger.exception("Error updating person: %s", person_id)
         return None
+
+
+def get_goals_data_action():
+    """Returns formatted and sorted data for goals scored."""
+    people = get_all_people_action()
+    # Convert Pydantic models to dictionaries for easier Jinja2 access
+    people_data = [p.model_dump() for p in people]
+    return sorted(
+        people_data, key=lambda p: p.get("goals_scored", 0) or 0, reverse=True
+    )
+
+
+def get_wins_data_action():
+    """Returns formatted and sorted data for games won."""
+    people = get_all_people_action()
+    # Convert Pydantic models to dictionaries for easier Jinja2 access
+    people_data = [p.model_dump() for p in people]
+    return sorted(people_data, key=lambda p: p.get("games_won", 0) or 0, reverse=True)

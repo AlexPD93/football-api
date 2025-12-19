@@ -5,13 +5,20 @@ FastAPI application entry point that includes person resource routers.
 """
 
 from fastapi import FastAPI
-from routers.person import user_router
+from fastapi.staticfiles import StaticFiles
+from routers.person.person_router import router as person_router
+from routers.dashboard_router import router as dashboard_router
 
 app = FastAPI()
+
+# Setup static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 def read_root():
     """Health check endpoint."""
     return {"status": "ok"}
 
-app.include_router(user_router.router)
+# Include the API and dashboard routers
+app.include_router(person_router)
+app.include_router(dashboard_router)
