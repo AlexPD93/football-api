@@ -1,0 +1,58 @@
+service: fastapi-app
+
+custom:
+  dotenv:
+    # Explicitly list the keys to NOT upload to AWS
+    exclude:
+      - AWS_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+
+provider:
+  name: aws
+  region: eu-west-2
+  architecture: x86_64
+  stage: ${opt:stage, 'dev'}
+  # Tell Lambda to use the Docker Image architecture
+  ecr:
+    images:
+      appimage:
+        path: ./ # Looks for the 'Dockerfile' in your root directory
+        platform: linux/amd64
+        provenance: false
+
+  # Environment variables for the Python code
+  environment:
+    TABLE_NAME: ${env:TABLE_NAME}
+
+  # IAM Permissions for DynamoDB
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource: "*" 
+
+functions:
+  app:
+    image:
+      name: appimage # Links to the image defined above
+    timeout: 29
+    memorySize: 512
+    events:
+      - httpApi:
+          path: /
+          method: ANY
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-dotenv-plugin # Still used to load your .env variables locally

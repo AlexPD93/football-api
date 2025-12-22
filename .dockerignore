@@ -1,0 +1,8 @@
+node_modules/
+.git/
+.github/
+tests/
+__pycache__/
+.venv/
+.env
+.serverless/

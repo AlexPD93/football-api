@@ -1,1 +1,6 @@
+.serverless/
+__pycache__/
+*.pyc
 .env
+.requirements.zip
+node_modules/
