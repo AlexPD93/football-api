@@ -8,7 +8,7 @@
         <button class="tab-button" hx-get="wins" hx-target="#tab-content" hx-trigger="click">Games Won</button>
     </div>
 
-    <div id="tab-content" hx-get="/goals" hx-trigger="load">
+    <div id="tab-content" hx-get="goals" hx-trigger="load">
         <p>Loading...</p>
     </div>
 {% endblock %}
