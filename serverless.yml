@@ -1,5 +1,5 @@
 org: footballapi
-app: fastapi-app
+app: football-api
 service: fastapi-app
 
 custom:
