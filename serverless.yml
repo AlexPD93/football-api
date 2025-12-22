@@ -58,3 +58,7 @@ functions:
 
 plugins:
   - serverless-dotenv-plugin # Still used to load your .env variables locally
+
+stages:
+  dev:
+    observability: true
