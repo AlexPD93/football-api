@@ -1,3 +1,5 @@
+org: footballapi
+app: fastapi-app
 service: fastapi-app
 
 custom:
