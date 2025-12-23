@@ -22,7 +22,7 @@ class PersonModel(Model):
     class Meta:
         """DynamoDB table configuration and AWS credentials."""
 
-        table_name = os.environ("TABLE_NAME")
+        table_name = os.environ["TABLE_NAME"]
         region = "eu-west-2"
 
     PK = UnicodeAttribute(hash_key=True)
