@@ -10,6 +10,7 @@ from mangum import Mangum
 
 from routers.person.person_router import router as person_router
 from routers.dashboard_router import router as dashboard_router
+from routers.login_router import router as login_router
 
 app = FastAPI()
 
@@ -26,5 +27,6 @@ def read_root():
 # Include the API and dashboard routers
 app.include_router(person_router)
 app.include_router(dashboard_router)
+app.include_router(login_router)
 
 handler = Mangum(app)

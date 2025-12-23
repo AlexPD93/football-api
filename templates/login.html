@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+    
+    <div style="width: 100%; max-width: 400px; padding: 40px; border-radius: 12px; 
+                background-color: #f9f9f9; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;">
+        <h1 style="margin-bottom: 10px;">Tuesday Football</h1>
+        <h2 style="margin-bottom: 10px;">Admin Login</h2>
+        <p style="color: #666; margin-bottom: 30px;">Enter the password to edit stats.</p>
+        
+        <form action="/login" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            <input type="password" name="password" placeholder="Enter password..." required autofocus
+                   style="padding: 14px; border-radius: 8px; border: 2px solid #ddd; outline: none; font-size: 16px;">
+            
+            <button type="submit" class="tab-button active" 
+                    style="width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none;">
+                Sign In
+            </button>
+        </form>
+        
+        {% if error %}
+        <div style="margin-top: 20px; padding: 10px; background-color: #ffebee; color: #c62828; border-radius: 5px;">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
