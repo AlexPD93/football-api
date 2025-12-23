@@ -14,15 +14,16 @@ from routers.person.models import Person, CreatePerson
 
 load_dotenv()
 
+
 # pylint: disable=too-few-public-methods
 class PersonModel(Model):
     """ORM model for Person records in DynamoDB."""
+
     class Meta:
         """DynamoDB table configuration and AWS credentials."""
-        table_name = "person"
+
+        table_name = os.environ("TABLE_NAME")
         region = "eu-west-2"
-        aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
-        aws_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
 
     PK = UnicodeAttribute(hash_key=True)
     SK = UnicodeAttribute(range_key=True)
