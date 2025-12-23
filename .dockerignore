@@ -1,8 +1,25 @@
-node_modules/
-.git/
-.github/
-tests/
-__pycache__/
-.venv/
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+.venv
+venv
+env
+
+# Serverless & Node
+.serverless
+node_modules
+
+# Environment
 .env
-.serverless/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Documentation
+README.md
+docs/

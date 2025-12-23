@@ -1,6 +1,31 @@
-.serverless/
+# Python Bytecode
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
+
+# Virtual Environments
+.venv/
+venv/
+env/
+bin/
+lib64/
+
+# Serverless & Framework Files
+.serverless/
 .requirements.zip
 node_modules/
+.serverlessrc
+
+# Environment Variables & Secrets
+.env
+.env.*
+! .env.example
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Docker logs
+*.log
