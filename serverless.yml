@@ -27,6 +27,7 @@ provider:
   # Environment variables for the Python code
   environment:
     TABLE_NAME: ${env:TABLE_NAME}
+    ADMIN_PASSWORD: ${env:ADMIN_PASSWORD}
 
   # IAM Permissions for DynamoDB
   iam:
