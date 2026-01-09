@@ -41,6 +41,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PERSON_TABLE_NAME: ${{ secrets.PERSON_TABLE_NAME }}
-          SESSION_TABLE_NAME: ${{ secrets.SESSION_TABLE_NAME }}
           # Required for Docker builds in CI to avoid manifest errors
           BUILDX_NO_DEFAULT_ATTESTATIONS: 1

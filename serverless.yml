@@ -9,7 +9,6 @@ custom:
       - AWS_REGION
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
-      - AWS_SESSION_TOKEN
 
 provider:
   name: aws
@@ -27,7 +26,6 @@ provider:
   # Environment variables for the Python code
   environment:
     PERSON_TABLE_NAME: ${env:PERSON_TABLE_NAME}
-    SESSION_TABLE_NAME: ${env:SESSION_TABLE_NAME}
     ADMIN_PASSWORD: ${env:ADMIN_PASSWORD}
 
   # IAM Permissions for DynamoDB
@@ -43,23 +41,6 @@ provider:
             - dynamodb:Query
             - dynamodb:Scan
           Resource: "*"
-
-resources:
-  Resources:
-    SessionsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${env:SESSION_TABLE_NAME}
-        AttributeDefinitions:
-          - AttributeName: session_id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: session_id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TimeToLiveSpecification:
-          AttributeName: expires_at
-          Enabled: true
 
 functions:
   app:
