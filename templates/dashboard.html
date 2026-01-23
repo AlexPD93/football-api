@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if error_message %}
+        <div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; text-align: center;">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
+    {% endif %}
+    
+    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+    {% if role == "admin" %}
+        <a href="/logout" style="text-decoration: none; color: #d9534f; font-weight: bold; border: 1px solid #d9534f; padding: 5px 10px; border-radius: 4px;">
+            Logout
+        </a>
+    {% else %}
+        <a href="/login" style="text-decoration: none; color: #4285F4; font-weight: bold; border: 1px solid #4285F4; padding: 5px 10px; border-radius: 4px;">
+            Login with Google
+        </a>
+    {% endif %}
+</div>
+
     <h1>Tuesday Football</h1>
 
     <div class="tabs">

@@ -4,15 +4,21 @@ Football API main application.
 FastAPI application entry point that includes person resource routers.
 """
 
+import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from mangum import Mangum
+from starlette.middleware.sessions import SessionMiddleware
 
 from routers.person.person_router import router as person_router
 from routers.dashboard_router import router as dashboard_router
 from routers.login_router import router as login_router
 
 app = FastAPI()
+
+app.add_middleware(
+    SessionMiddleware, secret_key=os.environ["SECRET_KEY"], max_age=86400
+)
 
 # Setup static files
 app.mount("/static", StaticFiles(directory="static"), name="static")

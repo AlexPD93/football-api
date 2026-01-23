@@ -4,7 +4,9 @@ Dashboard router for the Football API.
 Handles routes for the HTML dashboard and its components.
 """
 
-from fastapi import APIRouter, Request
+import os
+from typing import Optional
+from fastapi import APIRouter, Depends, Request, Query
 from fastapi.templating import Jinja2Templates
 from actions.person.actions import get_goals_data_action, get_wins_data_action
 
@@ -15,10 +17,33 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
+def get_admin_user(request: Request):
+    """
+    Checks the session to see if the user is a whitelisted admin.
+    Returns: 'admin', 'guest', or None.
+    """
+    email = request.session.get("user")
+    if not email:
+        return "guest"
+
+    whitelist = os.environ.get("ADMIN_WHITELIST", "").split(",")
+    if email in whitelist:
+        return "admin"
+
+    return "guest"
+
+
 @router.get("/dashboard")
-def get_dashboard(request: Request):
+def get_dashboard(
+    request: Request,
+    role: str = Depends(get_admin_user),
+    error: Optional[str] = Query(None),
+):
     """Renders the main dashboard shell."""
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    return templates.TemplateResponse(
+        "dashboard.html",
+        {"request": request, "role": role, "error_message": error},
+    )
 
 
 @router.get("/goals")
