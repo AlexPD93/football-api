@@ -27,6 +27,9 @@ provider:
   environment:
     PERSON_TABLE_NAME: ${env:PERSON_TABLE_NAME}
     ADMIN_WHITELIST: ${env:ADMIN_WHITELIST}
+    GOOGLE_CLIENT_ID: ${env:GOOGLE_CLIENT_ID}
+    GOOGLE_CLIENT_SECRET: ${env:GOOGLE_CLIENT_SECRET}
+    SECRET_KEY: ${env:SECRET_KEY}
 
 
   # IAM Permissions for DynamoDB

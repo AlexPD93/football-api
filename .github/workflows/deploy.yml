@@ -41,5 +41,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PERSON_TABLE_NAME: ${{ secrets.PERSON_TABLE_NAME }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
           # Required for Docker builds in CI to avoid manifest errors
           BUILDX_NO_DEFAULT_ATTESTATIONS: 1
