@@ -5,14 +5,14 @@ Handles GET, POST, PATCH and DELETE operations for person resources.
 """
 
 from fastapi import APIRouter, HTTPException
-from actions.person.actions import (
+from app.services.person_service import (
     get_all_people_action,
     get_person_by_id_action,
     create_person_action,
     delete_person_action,
     patch_person_action,
 )
-from .models import Person, CreatePerson, PatchPerson
+from app.schemas.person import Person, CreatePerson, PatchPerson
 
 router = APIRouter(prefix="/person", tags=["person"])
 

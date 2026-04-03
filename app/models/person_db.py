@@ -10,7 +10,7 @@ import uuid
 from dotenv import load_dotenv
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, NumberAttribute
-from routers.person.models import Person, CreatePerson
+from app.schemas.person import Person, CreatePerson
 
 load_dotenv()
 

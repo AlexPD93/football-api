@@ -1,14 +1,14 @@
 """
-Person action handlers for business logic.
+Person service for business logic.
 
 Provides functions to create, retrieve, and delete person records from DynamoDB.
 """
 
 import logging
 from pynamodb.exceptions import PutError, DeleteError, UpdateError, GetError
-from routers.person.models_db import PersonModel
-from routers.person.models import Person, CreatePerson, PatchPerson
-from utils import deep_merge
+from app.models.person_db import PersonModel
+from app.schemas.person import Person, CreatePerson, PatchPerson
+from app.utils.patch import deep_merge
 
 logger = logging.getLogger(__name__)
 

@@ -1,16 +1,13 @@
 """
-Dashboard router for the Football API.
+Web router for Person HTMX fragments.
 
-Handles routes for the HTML dashboard and its components.
+Handles HTML responses for person-related UI components.
 """
 
-import os
-from typing import Optional
-from fastapi import APIRouter, Depends, Request, Query
+from fastapi import APIRouter, Depends, Request
 from fastapi.templating import Jinja2Templates
-from routers.person.models import PatchPerson
-from routers.person.models import CreatePerson
-from actions.person.actions import (
+from app.schemas.person import PatchPerson, CreatePerson
+from app.services.person_service import (
     get_goals_data_action,
     get_wins_data_action,
     get_person_by_id_action,
@@ -18,41 +15,12 @@ from actions.person.actions import (
     delete_person_action,
     patch_person_action,
 )
+from app.routers.web.dashboard import get_admin_user
 
-# The router for the dashboard pages
-router = APIRouter()
+router = APIRouter(tags=["person-web"])
 
 # Templates are configured for this router
-templates = Jinja2Templates(directory="templates")
-
-
-def get_admin_user(request: Request):
-    """
-    Checks the session to see if the user is a whitelisted admin.
-    Returns: 'admin', 'guest', or None.
-    """
-    email = request.session.get("user")
-    if not email:
-        return "guest"
-
-    whitelist = os.environ.get("ADMIN_WHITELIST", "").split(",")
-    if email in whitelist:
-        return "admin"
-
-    return "guest"
-
-
-@router.get("/dashboard")
-def get_dashboard(
-    request: Request,
-    role: str = Depends(get_admin_user),
-    error: Optional[str] = Query(None),
-):
-    """Renders the main dashboard shell."""
-    return templates.TemplateResponse(
-        "dashboard.html",
-        {"request": request, "role": role, "error_message": error},
-    )
+templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/goals")
