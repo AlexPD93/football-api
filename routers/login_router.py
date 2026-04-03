@@ -33,6 +33,11 @@ async def login(request: Request):
     Redirects the user to the Google login page.
     """
     redirect_uri = request.url_for("auth_callback")
+
+    # Force HTTPS for the redirect URI if the request was forwarded via HTTPS
+    if request.headers.get("x-forwarded-proto") == "https":
+        redirect_uri = str(redirect_uri).replace("http://", "https://", 1)
+
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
@@ -47,8 +52,10 @@ async def auth_callback(request: Request):
     """
     try:
         token = await oauth.google.authorize_access_token(request)
-    except Exception:
-        raise HTTPException(status_code=400, detail="OAuth error")
+    except Exception as e:
+        # Improved error logging for debugging production issues
+        print(f"OAuth Access Token Error: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"OAuth error: {str(e)}")
 
     user_info = token.get("userinfo")
 
