@@ -1,0 +1,46 @@
+<tr id="row-{{ row.person_id }}">
+    {% for field in fields %}
+    <td>
+        {% if field == 'name' %}
+            <span style="font-weight: 600; color: var(--text-primary);">{{ row[field] }}</span>
+        {% else %}
+            {{ row[field] }}
+        {% endif %}
+    </td>
+    {% endfor %}
+    {% if role == 'admin' %}
+        <td>
+            <div class="control-group">
+                <button class="btn-icon" 
+                        hx-get="/edit/{{ row.person_id }}?table_type={{ table_type }}" 
+                        hx-target="#row-{{ row.person_id }}" 
+                        hx-swap="outerHTML"
+                        title="Edit Row">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                
+                <button class="btn-icon" 
+                        hx-delete="/delete/{{ row.person_id }}" 
+                        hx-target="closest tr" 
+                        hx-swap="delete"
+                        hx-trigger="confirmed"
+                        title="Click twice to delete"
+                        style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2); transition: all 0.2s;"
+                        onclick="if(this.classList.contains('is-confirming')) { 
+                            htmx.trigger(this, 'confirmed'); 
+                        } else { 
+                            this.classList.add('is-confirming'); 
+                            this.style.background = '#ef4444'; 
+                            this.style.color = 'white'; 
+                            setTimeout(() => { 
+                                this.classList.remove('is-confirming'); 
+                                this.style.background = ''; 
+                                this.style.color = ''; 
+                            }, 3000);
+                        }">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </button>
+            </div>
+        </td>
+    {% endif %}
+</tr>

@@ -1,0 +1,58 @@
+<tr id="row-{{ row.person_id }}" class="editing-row" style="background: rgba(30, 41, 59, 0.9); border: 1px solid var(--primary);">
+    <td>
+        <span class="name-cell">{{ row.name }}</span>
+    </td>
+    
+    <td>
+        <div class="control-group">
+            <button class="btn-icon" 
+                    hx-put="/actions/{{ fields[1] }}/decrement/{{ row.person_id }}?table_type={{ table_type }}" 
+                    hx-include="closest tr"
+                    hx-target="#row-{{ row.person_id }}" 
+                    hx-swap="outerHTML">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            
+            <input type="number" 
+                   name="{{ fields[1] }}" 
+                   value="{{ row[fields[1]] }}"
+                   class="input-number"
+                   onkeydown="if(['e', 'E', '+', '-'].includes(event.key)) event.preventDefault();"
+                   hx-put="/save/{{ row.person_id }}?table_type={{ table_type }}"
+                   hx-trigger="keyup[key=='Enter']"
+                   hx-include="closest tr"
+                   hx-target="#tab-content"
+                   hx-swap="innerHTML">
+            
+            <button class="btn-icon" 
+                    hx-put="/actions/{{ fields[1] }}/increment/{{ row.person_id }}?table_type={{ table_type }}" 
+                    hx-include="closest tr"
+                    hx-target="#row-{{ row.person_id }}" 
+                    hx-swap="outerHTML">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+        </div>
+    </td>
+
+    <td>
+        <div class="control-group">
+            <button class="btn-icon" 
+                    hx-put="/save/{{ row.person_id }}?table_type={{ table_type }}" 
+                    hx-include="closest tr"
+                    hx-target="#tab-content" 
+                    hx-swap="innerHTML"
+                    title="Save Changes"
+                    style="color: var(--primary); border-color: var(--primary);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button class="btn-icon" 
+                    hx-get="/cancel/{{ row.person_id }}?table_type={{ table_type }}" 
+                    hx-target="#row-{{ row.person_id }}" 
+                    hx-swap="outerHTML"
+                    title="Cancel"
+                    style="color: #ef4444; border-color: #ef4444;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </td>
+</tr>

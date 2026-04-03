@@ -1,0 +1,37 @@
+<div class="modal-overlay" id="player-modal">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <header class="modal-header">
+            <h2>Add New Player</h2>
+        </header>
+        
+        <form hx-post="/save/new" 
+              hx-target="#tab-content" 
+              hx-swap="innerHTML" 
+              hx-on::after-request="if(event.detail.successful) document.getElementById('player-modal').remove()">
+            
+            <input type="hidden" name="table_type" value="{{ table_type }}">
+            
+            <div class="form-group">
+                <label for="name">Player Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="e.g. John Doe" required autofocus>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group">
+                    <label for="goals_scored">Goals Scored</label>
+                    <input type="number" id="goals_scored" name="goals_scored" class="form-control" value="0" min="0" onkeydown="if(['e', 'E', '+', '-'].includes(event.key)) event.preventDefault();">
+                </div>
+                
+                <div class="form-group">
+                    <label for="games_won">Games Won</label>
+                    <input type="number" id="games_won" name="games_won" class="form-control" value="0" min="0" onkeydown="if(['e', 'E', '+', '-'].includes(event.key)) event.preventDefault();">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-auth btn-logout" onclick="document.getElementById('player-modal').remove()">Cancel</button>
+                <button type="submit" class="btn-primary">Create Player</button>
+            </div>
+        </form>
+    </div>
+</div>
