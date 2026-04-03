@@ -68,19 +68,6 @@ uvicorn main:app --reload
 ```
 The dashboard will be available at `http://localhost:8000/dashboard`.
 
-## 🚢 Deployment
-
-The project is deployed to AWS Lambda using the Serverless Framework with a Docker image runtime.
-
-**Deploy to dev:**
-```bash
-serverless deploy --stage dev
-```
-
-The configuration is managed via `serverless.yml`, which handles:
-- ECR image creation and upload.
-- IAM roles for DynamoDB access.
-- Environment variable injection.
 
 ## 📁 Project Structure
 
