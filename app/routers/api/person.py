@@ -11,54 +11,44 @@ from app.services.person_service import (
     create_person_action,
     delete_person_action,
     patch_person_action,
+    PersonNotFoundError,
+    PersonCreationError,
+    PersonUpdateError,
+    PersonDeleteError,
 )
 from app.schemas.person import Person, CreatePerson, PatchPerson
 
 router = APIRouter(prefix="/person", tags=["person"])
 
-class PersonNotFoundError(Exception):
-    """Person not found error"""
-
-class PersonCreationError(Exception):
-    """Person creation error"""
-
-class PersonUpdateError(Exception):
-    """Person update error"""
-
-class PersonDeleteError(Exception):
-    """Person delete error"""
 
 @router.get("/", response_model=list[Person])
 def get_all_persons():
-    """Retrieve a person by ID."""
-    try:
-        return get_all_people_action()
-    except PersonNotFoundError as exc:
-        raise HTTPException(status_code=500, detail="Internal server error.") from exc
+    """Retrieve all persons."""
+    return get_all_people_action()
+
 
 @router.get("/{personId}", response_model=Person)
 def get_person(person_id: str):
     """Retrieve a person by ID."""
     try:
-        person = get_person_by_id_action(person_id)
-        if person is None:
-            raise HTTPException(
-                status_code=404, 
-                detail=f"Person with ID {person_id} not found."
-            )
-        return person
-    except HTTPException:
-        raise
+        return get_person_by_id_action(person_id)
+    except PersonNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=500, detail="Internal server error") from exc
 
-@router.post("/", response_model=CreatePerson)
+
+@router.post("/", response_model=Person)
 def create_person(person: CreatePerson):
     """Create a new person."""
     try:
-        return create_person_action(person).to_domain()
+        person_model = create_person_action(person)
+        return person_model.to_domain()
     except PersonCreationError as exc:
-        raise HTTPException(status_code=500, detail="Failed to create person") from exc
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
+
 
 @router.delete("/{personId}", status_code=204)
 def delete_person(person_id: str):
@@ -66,17 +56,22 @@ def delete_person(person_id: str):
     try:
         delete_person_action(person_id)
     except PersonNotFoundError as exc:
-        raise HTTPException(status_code=404, detail="Person not found") from exc
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     except PersonDeleteError as exc:
-        raise HTTPException(status_code=500, detail="Failed to delete person") from exc
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
 
-@router.patch("/{person_id}", response_model=PatchPerson)
+
+@router.patch("/{person_id}", response_model=Person)
 def patch_person(person_id: str, person: PatchPerson):
     """Edit a person by ID."""
-
     try:
-        return patch_person_action(person_id, person)
+        person_model = patch_person_action(person_id, person)
+        return person_model.to_domain()
     except PersonNotFoundError as exc:
-        raise HTTPException(status_code=404, detail="Person not found") from exc
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     except PersonUpdateError as exc:
-        raise HTTPException(status_code=500, detail="Failed to update person") from exc
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
