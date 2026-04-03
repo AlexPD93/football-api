@@ -1,24 +1,27 @@
 <div id="data-table">
     {% if rows %}
-        <table>
-            <thead>
-                <tr>
-                    {% for header in headers %}
-                        <th>{{ header }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in rows %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
                     <tr>
-                        {% for field in fields %}
-                            <td>{{ row[field] }}</td>
+                        {% for header in headers %}
+                            <th>{{ header }}</th>
                         {% endfor %}
+                        {% if role == 'admin' %}
+                            <th style="width: 80px;">Action</th>
+                        {% endif %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="table-body">
+                    {% for row in rows %}
+                        {% include "partials/_table_row.html" %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-        <p>No data available.</p>
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+            <p>No data available yet.</p>
+        </div>
     {% endif %}
 </div>
