@@ -15,15 +15,14 @@ A modern, serverless web application for tracking football player statistics (go
 
 ## 🛠 Tech Stack
 
-- **Backend**: Python 3.x, FastAPI, Pydantic
+- **Backend**: Python 3.11, FastAPI, Pydantic
 - **Frontend**: HTMX, Jinja2 Templates, Vanilla CSS
 - **Database**: AWS DynamoDB (via PynamoDB)
 - **Deployment**: Serverless Framework, AWS Lambda (Docker Runtime)
-- **Monitoring**: Sentry Integration
 
 ## 📋 Prerequisites
 
-- Python 3.10+
+- Python 3.11+
 - Node.js & NPM (for Serverless Framework plugins)
 - Docker (for deployment)
 - AWS CLI configured with appropriate credentials
@@ -64,21 +63,31 @@ A modern, serverless web application for tracking football player statistics (go
 
 Run the application locally using Uvicorn:
 ```bash
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 The dashboard will be available at `http://localhost:8000/dashboard`.
 
 
-## 📁 Project Structure
+## 📁 Project Structure (Clean Layered Architecture)
 
-- `main.py`: Application entry point and middleware configuration.
-- `routers/`: FastAPI routers for API endpoints, dashboard, and login logic.
-- `actions/`: Business logic and database operations (CRUD).
-- `models/`: Pydantic and PynamoDB data models.
-- `templates/`: Jinja2 HTML templates and HTMX partials.
-- `static/`: Static assets (CSS, HTMX library).
-- `serverless.yml`: Infrastructure as Code configuration.
-- `Dockerfile`: Container definition for Lambda runtime.
+The application follows a clean, layered architecture organized within the `app/` directory:
+
+- **`app/main.py`**: Application entry point and middleware configuration.
+- **`app/routers/`**: Interface layer, separated by delivery mechanism:
+  - **`api/`**: Machine-to-machine JSON endpoints (e.g., `/api/person`).
+  - **`web/`**: Browser-based HTML/HTMX endpoints (e.g., `/dashboard`, `/person/web`).
+- **`app/services/`**: Business logic and use cases (Service layer).
+- **`app/models/`**: Data access layer (DynamoDB entities via PynamoDB).
+- **`app/schemas/`**: Data Transfer Objects (Pydantic models for validation).
+- **`app/templates/`**: UI Layer (Jinja2 HTML templates and HTMX partials).
+- **`app/static/`**: Static assets (CSS, HTMX library).
+- **`app/utils/`**: Shared utility helpers.
+
+## 🏗 Deployment
+
+The application is deployed to AWS Lambda as a Docker container:
+- `Dockerfile`: Defines the Lambda-compatible container environment.
+- `serverless.yml`: Infrastructure as Code configuration for AWS resources.
 
 ## 🧪 Testing
 
