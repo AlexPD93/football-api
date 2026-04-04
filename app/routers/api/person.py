@@ -27,7 +27,7 @@ def get_all_persons():
     return get_all_people_action()
 
 
-@router.get("/{personId}", response_model=Person)
+@router.get("/{person_id}", response_model=Person)
 def get_person(person_id: str):
     """Retrieve a person by ID."""
     try:
@@ -50,7 +50,7 @@ def create_person(person: CreatePerson):
         raise HTTPException(status_code=500, detail="Internal server error") from exc
 
 
-@router.delete("/{personId}", status_code=204)
+@router.delete("/{person_id}", status_code=204)
 def delete_person(person_id: str):
     """Delete a person by ID."""
     try:
