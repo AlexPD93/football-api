@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory="app/templates")
 def get_admin_user(request: Request):
     """
     Checks the session to see if the user is a whitelisted admin.
-    Returns: 'admin', 'guest', or None.
+    Returns: 'admin' or 'guest'
     """
     email = request.session.get("user")
     if not email:
@@ -28,8 +28,6 @@ def get_admin_user(request: Request):
     whitelist = os.environ.get("ADMIN_WHITELIST", "").split(",")
     if email in whitelist:
         return "admin"
-
-    return "guest"
 
 
 @router.get("/dashboard")
