@@ -88,9 +88,3 @@ The application follows a clean, layered architecture organized within the `app/
 The application is deployed to AWS Lambda as a Docker container:
 - `Dockerfile`: Defines the Lambda-compatible container environment.
 - `serverless.yml`: Infrastructure as Code configuration for AWS resources.
-
-## 🧪 Testing
-
-(Add instructions here once test suites are implemented)
-
----
